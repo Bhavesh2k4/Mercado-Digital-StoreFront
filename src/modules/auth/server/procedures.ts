@@ -1,73 +1,84 @@
-import { headers as getHeaders , cookies as getCookies } from "next/headers";
+import { headers as getHeaders, cookies as getCookies } from "next/headers";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Category } from "@/payload-types";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { AUTH_COOKIE } from "../constants";
 import { loginSchema, registerSchema } from "../schemas";
+import { generateAuthCookie } from "../utils";
 
 export const authRouter = createTRPCRouter({
-    getMany: baseProcedure.query(async ({ctx})=> {
-            const headers = await getHeaders();
-            const session = await ctx.db.auth({headers});
-            return session;
-    }),
-    register: baseProcedure.input(registerSchema)
-    .mutation(async ({ctx, input})=> {
-        const existingData = await ctx.db.find({
-            collection: "users",
-            limit: 1,
-            where: {
-                username: {
-                    equals: input.username,
-                }
-            }
+  session: baseProcedure.query(async ({ ctx }) => {
+    const headers = await getHeaders();
+    const session = await ctx.db.auth({ headers });
+    return session;
+  }),
+  register: baseProcedure
+    .input(registerSchema)
+    .mutation(async ({ ctx, input }) => {
+      const existingData = await ctx.db.find({
+        collection: "users",
+        limit: 1,
+        where: {
+          username: {
+            equals: input.username,
+          },
+        },
+      });
+      const existingUser = existingData.docs[0];
+      if (existingUser) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Username already exists",
         });
-        const existingUser = existingData.docs[0];
-        if (existingUser) {
-            throw new TRPCError({
-                code: "BAD_REQUEST",
-                message: "Username already exists"
-            });
-        }
-        await ctx.db.create({
-            collection: "users",
-            data: {
-                email: input.email,
-                password: input.password,
-                username: input.username,
-            }
-        }); 
-    }),
-    login: baseProcedure.input(loginSchema)
-    .mutation(async ({ctx, input})=> {
-        const data = await ctx.db.login({
-            collection: "users",
-            data: {
-                email: input.email,
-                password: input.password,
-            }
+      }
+      await ctx.db.create({
+        collection: "users",
+        data: {
+          email: input.email,
+          password: input.password,
+          username: input.username,
+        },
+      });
+      const data = await ctx.db.login({
+        collection: "users",
+        data: {
+          email: input.email,
+          password: input.password,
+        },
+      });
+
+      if (!data.token) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Failed to login",
         });
-        if (!data.token){
-            throw new TRPCError({
-                code: "UNAUTHORIZED",
-                message: "Invalid email or password"
-            });
-        }
+      }
 
-        const cookies = await getCookies();
-        cookies.set({
-            name: AUTH_COOKIE,
-            value: data.token,
-            httpOnly: true,
-            path: "/",
-        })
-        return data;
+      await generateAuthCookie({
+        prefix: ctx.db.config.cookiePrefix,
+        value: data.token,
+      });
     }),
-    logout: baseProcedure.mutation(async ()=> {
-        const cookies = await getCookies();
-        cookies.delete(AUTH_COOKIE);
-        //return { success: true };
-    }),
+  login: baseProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
+    const data = await ctx.db.login({
+      collection: "users",
+      data: {
+        email: input.email,
+        password: input.password,
+      },
+    });
+    if (!data.token) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Invalid email or password",
+      });
+    }
 
-})
+    await generateAuthCookie({
+      prefix: ctx.db.config.cookiePrefix,
+      value: data.token,
+    });
+
+    return data;
+  }),
+});

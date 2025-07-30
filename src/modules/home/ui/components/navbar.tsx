@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Sidebar } from './sidebar';
 import { MenuIcon } from 'lucide-react';
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
 
 const boldonse = Boldonse({
   subsets: ["latin"],
@@ -37,8 +39,11 @@ const NavbarItems = [
 ];
 
 const Navbar = () => {
+
     const pathname =usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const trpc=useTRPC();
+    const session =useQuery(trpc.auth.session.queryOptions()) 
   return (
     <nav className='h-18 flex border-b justify-between font-medium bg-white'>
         <Link href='/' className='pl-6 flex items-center'>
@@ -55,6 +60,14 @@ const Navbar = () => {
             ))}
         </div>
 
+        {session.data?.user?(
+            <div className='hidden lg:flex'>
+                <Button asChild className='border-l border-b-0 border-t-0 border-r-0 px-12 rounded-none h-full bg-black text-white hover:text-black hover:bg-pink-400 text-lg transition-colors'>
+                    <Link prefetch href='/admin'>Dashboard</Link>
+                </Button>
+            </div>
+        ):
+        (
         <div className='hidden lg:flex'>
             <Button asChild variant="secondary" className='border-l border-b-0 border-t-0 border-r-0 px-12 rounded-none h-full bg-white hover:bg-pink-400 text-lg transition-colors'>
                 <Link prefetch href='/sign-in'>Login</Link>
@@ -63,6 +76,8 @@ const Navbar = () => {
                 <Link prefetch href='/sign-up'>Get Started : ) </Link>
             </Button>
         </div>
+        )
+       }
 
         <div className='flex items-center justify-center lg:hidden'>
             <Button variant="ghost" className='size-12 border-transparent' onClick={() => setIsSidebarOpen(true)}>
