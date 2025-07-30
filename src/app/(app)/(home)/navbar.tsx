@@ -57,10 +57,10 @@ const Navbar = () => {
 
         <div className='hidden lg:flex'>
             <Button asChild variant="secondary" className='border-l border-b-0 border-t-0 border-r-0 px-12 rounded-none h-full bg-white hover:bg-pink-400 text-lg transition-colors'>
-                <Link href='/sign-in'>Login</Link>
+                <Link prefetch href='/sign-in'>Login</Link>
             </Button>
             <Button asChild className='border-l border-b-0 border-t-0 border-r-0 px-12 rounded-none h-full bg-black text-white hover:text-black hover:bg-pink-400 text-lg transition-colors'>
-                <Link href='/sign-up'>Get Started : ) </Link>
+                <Link prefetch href='/sign-up'>Get Started : ) </Link>
             </Button>
         </div>
 
