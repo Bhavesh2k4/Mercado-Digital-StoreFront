@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { customCategory } from '../types';
 import {Sheet, SheetContent, SheetHeader, SheetTitle} from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -7,27 +6,30 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { on } from 'events';
 import { set } from 'date-fns';
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
+import { CategoriesGetManyOutput } from '@/modules/categories/types';
 
 interface props {
     open ?: boolean;
     onOpenChange ?: (open: boolean) => void;
-    data: customCategory[];
 }
-
-const Categoriesidebar = ({ open, onOpenChange ,data}: props) => {
+const Categoriesidebar = ({ open, onOpenChange }: props) => {
+    const trpc = useTRPC();
+    const { data } = useQuery(trpc.categories.getMany.queryOptions());
     const router = useRouter();
     const handleOpenChange = (open: boolean) => {
         setSelectedCategory(null);
         setParentCategory(null);
         onOpenChange?.(open);
     };
-    const [parentCategory, setParentCategory] = useState<customCategory[]| null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<customCategory | null>(null);
+    const [parentCategory, setParentCategory] = useState< CategoriesGetManyOutput| null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[1] | null>(null);
     const currentCategories = parentCategory ?? data ?? [];
 
-    const handleCategoryClick = (category: customCategory) => {
+    const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
         if (category.subcategories && category.subcategories.length > 0) {
-            setParentCategory(category.subcategories as customCategory[]);
+            setParentCategory(category.subcategories as CategoriesGetManyOutput);
             setSelectedCategory(category);
         } else {
             if(parentCategory && selectedCategory) {
