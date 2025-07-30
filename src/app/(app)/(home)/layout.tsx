@@ -5,6 +5,7 @@ import SearchFilters from './search-filters'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { Category } from '@/payload-types'
+import { customCategory } from './types'
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const payload = await getPayload({
@@ -18,10 +19,11 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         parent: {
           exists: false,
         }
-      }
+      },
+      sort: 'name',
     })
 
-    const formattedData = data.docs.map((doc) => ({
+    const formattedData: customCategory[] = data.docs.map((doc) => ({
       ...doc,
       subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
         ...(doc as Category),

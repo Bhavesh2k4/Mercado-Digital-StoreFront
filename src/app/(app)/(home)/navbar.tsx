@@ -40,7 +40,7 @@ const Navbar = () => {
     const pathname =usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <nav className='h-20 flex border-b justify-between font-medium bg-white'>
+    <nav className='h-18 flex border-b justify-between font-medium bg-white'>
         <Link href='/' className='pl-6 flex items-center'>
           <span className={cn("text-4xl font-semibold", boldonse.className)}>mercado</span>
         </Link>
