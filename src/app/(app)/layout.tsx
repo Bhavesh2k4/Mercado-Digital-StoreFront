@@ -3,6 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -22,10 +23,12 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.className} antialiased`}
       >
+        <NuqsAdapter>
         <TRPCReactProvider>
           {children}
           <Toaster />
         </TRPCReactProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

@@ -8,6 +8,7 @@ import { useTRPC } from '@/trpc/client';
 import { useQuery } from '@tanstack/react-query';
 
 import { Category } from "@/payload-types"
+import { CategoriesGetManyOutput } from '@/modules/categories/types';
 
 export type customCategory = Category & {
     subcategories: Category[];
@@ -27,13 +28,13 @@ const Categoriesidebar = ({ open, onOpenChange }: props) => {
         setParentCategory(null);
         onOpenChange?.(open);
     };
-    const [parentCategory, setParentCategory] = useState<customCategory[]| null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<customCategory | null>(null);
+    const [parentCategory, setParentCategory] = useState<CategoriesGetManyOutput | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[1] | null>(null);
     const currentCategories = parentCategory ?? data ?? [];
 
-    const handleCategoryClick = (category: customCategory) => {
+    const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
         if (category.subcategories && category.subcategories.length > 0) {
-            setParentCategory(category.subcategories as customCategory[]);
+            setParentCategory(category.subcategories as CategoriesGetManyOutput);
             setSelectedCategory(category);
         } else {
             if(parentCategory && selectedCategory) {
