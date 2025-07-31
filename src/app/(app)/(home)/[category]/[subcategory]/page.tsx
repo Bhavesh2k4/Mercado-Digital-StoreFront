@@ -5,6 +5,7 @@ import React, { Suspense } from 'react'
 import type { SearchParams } from 'nuqs/server';
 import { LoadProductFilters } from '@/modules/products/search-params';
 import ProductListView from '@/modules/products/ui/views/product-list-view';
+import { DEFAULT_LIMIT } from '@/constants';
 interface props{
     params: Promise<{
         subcategory: string;
@@ -16,9 +17,10 @@ const CategoryPage  = async ({params,searchParams}:props) => {
     const filters = await LoadProductFilters(searchParams);
     console.log("filters", filters);
     const queryClient=getQueryClient();
-    void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({
+    void queryClient.prefetchInfiniteQuery(trpc.products.getMany.infiniteQueryOptions({
         category:subcategory,
         ...filters,
+        limit: DEFAULT_LIMIT,
     }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
