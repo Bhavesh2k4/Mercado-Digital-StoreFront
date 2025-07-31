@@ -12,3 +12,7 @@ export function formatCurrency(value: number | string) {
     maximumFractionDigits: 0,
   }).format(Number(value));
 };
+
+export function generateTenantURL(slug: string) {
+  return `/tenants/${slug}`;
+}
