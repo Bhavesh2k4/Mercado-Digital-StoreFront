@@ -1,39 +1,31 @@
-import {
-  ProductList,
-  ProductListSkeleton,
-} from "@/modules/products/ui/components/product-list";
-import { trpc, getQueryClient } from "@/trpc/server";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import React, { Suspense } from "react";
-interface props {
-  params: Promise<{
-    subcategory: string;
-  }>;
+
+import { trpc , getQueryClient } from '@/trpc/server';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import React, { Suspense } from 'react'
+import type { SearchParams } from 'nuqs/server';
+import { LoadProductFilters } from '@/modules/products/search-params';
+import ProductListView from '@/modules/products/ui/views/product-list-view';
+interface props{
+    params: Promise<{
+        subcategory: string;
+    }>,
+    searchParams:Promise<SearchParams>
 }
-const SubCategoryPage = async ({ params }: props) => {
-  const { subcategory } = await params;
-  const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.products.getMany.queryOptions({
-      category: subcategory,
-    })
-  );
+const CategoryPage  = async ({params,searchParams}:props) => {
+    const { subcategory } = await params;
+    const filters = await LoadProductFilters(searchParams);
+    console.log("filters", filters);
+    const queryClient=getQueryClient();
+    void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({
+        category:subcategory,
+        ...filters,
+    }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="px-4 lg:px-12 py-8 flex flex-col gap-4">
-        <div className="grid grid-cols-1 lg:grid-cols-6 xl:grid-cols-8 gap-y-6 gap-x-12">
-            <div className="lg:col-span-2 xl:col-span-2">
-            <div className="border p-2">Product Filters</div>
-          </div>
-          <div className="lg:col-span-4 xl:col-span-6">
-            <Suspense fallback={<ProductListSkeleton />}>
-              <ProductList category={subcategory} />
-            </Suspense>
-          </div>
-        </div>
-      </div>
+        <ProductListView category={subcategory} />
     </HydrationBoundary>
-  );
-};
 
-export default SubCategoryPage;
+  )
+}
+
+export default CategoryPage
