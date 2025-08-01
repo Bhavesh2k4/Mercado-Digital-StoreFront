@@ -1,13 +1,11 @@
 "use client";
-import React, { act } from 'react'
+import React from 'react'
 import SearchInput from './search-input';
 import Categories from './categories';
 import { useTRPC } from '@/trpc/client';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { DEFAULT_BG_COLOR } from '@/modules/home/constants';
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import BreadcrumbNavigation from './BreadcrumbNavigation';
 
 export const SearchFilters = () => {

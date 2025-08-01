@@ -1,4 +1,3 @@
-import React from 'react'
 import { parseAsString,createLoader, parseAsArrayOf, parseAsStringLiteral } from 'nuqs/server'
 export const sortValues = ["Newest", "Oldest", "Default"] as const;
 export const params = {

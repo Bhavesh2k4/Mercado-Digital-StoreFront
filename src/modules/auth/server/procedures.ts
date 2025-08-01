@@ -1,7 +1,5 @@
-import { headers as getHeaders, cookies as getCookies } from "next/headers";
+import { headers as getHeaders } from "next/headers";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
-import { Category } from "@/payload-types";
-import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { loginSchema, registerSchema } from "../schemas";
 import { generateAuthCookie } from "../utils";

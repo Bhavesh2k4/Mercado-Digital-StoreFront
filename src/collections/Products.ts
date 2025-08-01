@@ -1,5 +1,4 @@
 import type { CollectionConfig } from "payload";
-import { Tenant } from "@/payload-types";
 import { isSuperAdmin } from "@/lib/access";
 
 export const Products: CollectionConfig = {

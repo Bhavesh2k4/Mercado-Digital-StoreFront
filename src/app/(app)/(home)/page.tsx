@@ -1,7 +1,6 @@
 
 import { trpc , getQueryClient } from '@/trpc/server';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import React, { Suspense } from 'react'
 import type { SearchParams } from 'nuqs/server';
 import { LoadProductFilters } from '@/modules/products/search-params';
 import ProductListView from '@/modules/products/ui/views/product-list-view';

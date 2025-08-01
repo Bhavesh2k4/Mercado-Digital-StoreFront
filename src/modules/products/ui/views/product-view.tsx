@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Fragment, useState } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
-import { CheckCheckIcon, CheckIcon, LinkIcon, StarIcon } from "lucide-react";
+import { CheckCheckIcon, LinkIcon, StarIcon } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { StarRating } from "@/components/star-rating";
 import { formatCurrency, generateTenantURL } from "@/lib/utils";
-import { set } from "date-fns";
 const CartButton = dynamic(
   () => import("../components/cart-button").then(
     (mod) => mod.CartButton,

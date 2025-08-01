@@ -1,6 +1,5 @@
 
 import { Input } from "@/components/ui/input";
-import { on } from "events";
 
 interface props{
     minPrice?: string | null;

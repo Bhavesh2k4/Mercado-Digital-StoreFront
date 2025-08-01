@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronDownIcon, ChevronRightIcon, Filter, FilterXIcon, Tags, Trash2Icon } from 'lucide-react'
+import { ChevronDownIcon, ChevronRightIcon,Trash2Icon } from 'lucide-react'
 import React from 'react'
 import { PriceFilter } from './price-filter'
 import {UseProductFilters} from '../../hooks/use-product-filters'

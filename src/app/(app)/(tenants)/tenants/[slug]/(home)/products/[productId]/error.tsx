@@ -60,7 +60,7 @@ const ErrorPage = () => {
 
       <div className="grid grid-cols-3 gap-3 mt-4">
         <div className="bg-white border-3 border-black p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform rotate-1">
-          <h4 className="font-black text-sm mb-1">MAYBE WE DON'T</h4>
+          <h4 className="font-black text-sm mb-1">MAYBE WE DONT</h4>
           <p className="font-semibold text-xs">Have what you want</p>
         </div>
         

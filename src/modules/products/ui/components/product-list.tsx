@@ -1,6 +1,6 @@
 "use client";
 import { useTRPC } from '@/trpc/client'
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import React from 'react'
 import {UseProductFilters} from '../../hooks/use-product-filters';
 import { ProductCard, ProductCardSkeleton } from './product-card';
