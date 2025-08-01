@@ -225,6 +225,8 @@ export interface Category {
   createdAt: string;
 }
 /**
+ * You must verify your account before creating products
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
@@ -232,7 +234,21 @@ export interface Product {
   id: string;
   tenant?: (string | null) | Tenant;
   name: string;
-  description?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Price in INR
    */
@@ -241,6 +257,32 @@ export interface Product {
   tags?: (string | Tag)[] | null;
   image?: (string | null) | Media;
   refundPolicy?: ('no-refunds' | '1-day' | '3-days' | '7-days' | '14-days' | '30-days') | null;
+  /**
+   * Protected content only visible to customers after purchase. Add product documentation, downloadable files, getting started guides, and bonus materials. Supports Markdown formatting
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * If checked, this product will not be shown on the public storefront
+   */
+  isPrivate?: boolean | null;
+  /**
+   * If checked, this product will be archived
+   */
+  isArchived?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -443,6 +485,9 @@ export interface ProductsSelect<T extends boolean = true> {
   tags?: T;
   image?: T;
   refundPolicy?: T;
+  content?: T;
+  isPrivate?: T;
+  isArchived?: T;
   updatedAt?: T;
   createdAt?: T;
 }
