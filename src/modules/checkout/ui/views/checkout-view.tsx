@@ -19,48 +19,50 @@ interface CheckoutViewProps {
 }
 
 export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
-  //const router = useRouter();
-  //const [states, setStates] = useCheckoutStates();
+  const router = useRouter();
+  const [states, setStates] = useCheckoutStates();
   const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
   
   const trpc = useTRPC();
-  //const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const { data, error, isLoading } = useQuery(trpc.checkout.getProducts.queryOptions({
     ids: productIds,
   }));
 
-//   const purchase = useMutation(trpc.checkout.purchase.mutationOptions({
-//     onMutate: () => {
-//       setStates({ success: false, cancel: false });
-//     },
-//     onSuccess: (data) => {
-//       window.location.href = data.url;
-//     },
-//     onError: (error) => {
-//       if (error.data?.code === "UNAUTHORIZED") {
-//         // TODO: Modify when subdomains enabled
-//         router.push("/sign-in");
-//       }
+  const purchase = useMutation(trpc.checkout.purchase.mutationOptions(
+    {
+    onMutate: () => {
+      setStates({ success: false, cancel: false });
+    },
+    onSuccess: (data) => {
+      window.location.href = data.url;
+    },
+    onError: (error) => {
+      if (error.data?.code === "UNAUTHORIZED") {
+        router.push("/sign-in");
+      }
 
-//       toast.error(error.message);
-//     },
-//   }));
+      toast.error(error.message);
+    },
+  }
+));
 
-//   useEffect(() => {
-//     if (states.success) {
-//       setStates({ success: false, cancel: false });
-//       clearCart();
-//       queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
-//       router.push("/library");
-//     }
-//   }, [
-//     states.success, 
-//     clearCart, 
-//     router, 
-//     setStates,
-//     queryClient,
-//     trpc.library.getMany,
-//   ]);
+  useEffect(() => {
+    if (states.success) {
+      setStates({ success: false, cancel: false });
+      clearCart();
+      //queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
+      router.push("/library");
+    }
+  }, [
+    states.success, 
+    clearCart, 
+    router, 
+    setStates,
+    queryClient,
+    //trpc.library.getMany,
+  ]);
+
   //yes
   useEffect(() => {
     if (error?.data?.code === "NOT_FOUND") {
@@ -115,10 +117,9 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
         <div className="lg:col-span-3">
           <CheckoutSidebar
             total={data?.totalPrice || 0}
-            // onPurchase={() => purchase.mutate({ tenantSlug, productIds })}
-            onPurchase={() => toast.error("Checkout functionality is not implemented yet.")}
-            isCancelled={false}
-            disabled={false}
+            onPurchase={() => purchase.mutate({ tenantSlug, productIds })}
+            isCancelled={states.cancel}
+            disabled={purchase.isPending}
           />
         </div>
 
