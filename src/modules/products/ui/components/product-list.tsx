@@ -44,8 +44,8 @@ export const ProductList = ({category,tenantSlug,narrowView}:props) => {
           key={product.id} id={product.id}
           name={product.name} imageUrl={product.image?.url} tenantSlug={product.tenant?.slug}
           tenantImageUrl={product.tenant?.image?.url}
-          reviewCount={5}
-          reviewRating={4.5} price={product.price}
+          reviewCount={product.reviewCount}
+          reviewRating={product.reviewRating} price={product.price}
           />
       ))}
     </div>
