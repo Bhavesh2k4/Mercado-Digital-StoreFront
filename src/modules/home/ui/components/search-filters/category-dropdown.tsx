@@ -1,5 +1,4 @@
 "use client"
-import { Category } from '@/payload-types';
 import {Button} from '@/components/ui/button';
 import React from 'react'
 import { cn } from '@/lib/utils';
