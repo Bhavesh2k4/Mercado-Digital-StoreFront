@@ -177,11 +177,11 @@ export interface Tenant {
   slug: string;
   image?: (string | null) | Media;
   /**
-   * Stripe Account ID associated with your shop
+   * Stripe Account ID associated with your shop(Not implemented yet)
    */
   stripeAccountId: string;
   /**
-   * You cannot create products until you submit your Stripe details
+   * You cannot create products until you submit your Stripe details( Not implemented yet - Allowing all users to create products)
    */
   stripeDetailsSubmitted?: boolean | null;
   updatedAt: string;
@@ -225,7 +225,7 @@ export interface Category {
   createdAt: string;
 }
 /**
- * You must verify your account before creating products
+ * You must verify your account before creating products( Not implemented yet (Indian Payment Regulations doesnt allow stripe accounts to be created) - Allowing all users to create products)
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".

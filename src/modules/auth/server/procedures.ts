@@ -36,7 +36,7 @@ export const authRouter = createTRPCRouter({
         data: {
           name: input.username,
           slug: input.username,
-          stripeAccountId: "test",
+          stripeAccountId: "stripe-test-id-(Stripe Connect not implemented yet : Tough with Indian Regulations)",
         },
       })
       await ctx.db.create({

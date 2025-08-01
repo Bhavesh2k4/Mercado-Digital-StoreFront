@@ -5,6 +5,7 @@ const categories = [
   {
     name: "All",
     slug: "all",
+    color: "#F5F5F5",
   },
   {
     name: "Digital Coupons",
@@ -146,8 +147,8 @@ const seed = async () => {
   await payload.create({
     collection: "users",
     data: {
-      email: "admin@demo.com",
-      password: "demo",
+      email: "admin@mercado.com",
+      password: "mercado",
       roles: ["super-admin"],
       username: "admin",
       tenants: [

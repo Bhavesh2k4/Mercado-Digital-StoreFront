@@ -8,15 +8,16 @@ export const Products: CollectionConfig = {
     create: ({ req }) => {
       if (isSuperAdmin(req.user)) return true;
 
-      const tenant = req.user?.tenants?.[0]?.tenant as Tenant
+      //const tenant = req.user?.tenants?.[0]?.tenant as Tenant
 
-      return Boolean(tenant?.stripeDetailsSubmitted);
+      // return Boolean(tenant?.stripeDetailsSubmitted);
+      return true; // For now, allow all users to create products
     },
     delete: ({ req }) => isSuperAdmin(req.user),
   },
   admin: {
     useAsTitle: "name",
-    description: "You must verify your account before creating products",
+    description: "You must verify your account before creating products( Not implemented yet (Indian Payment Regulations doesnt allow stripe accounts to be created) - Allowing all users to create products)",
   },
   fields: [
     {
