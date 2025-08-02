@@ -3,6 +3,11 @@ import { useQueryStates ,parseAsString, parseAsArrayOf, parseAsStringLiteral} fr
 const sortValues = ["Newest", "Oldest", "Default"] as const;
 
 export const params = {
+    search: parseAsString.
+        withOptions({
+            clearOnDefault: true,
+        })
+        .withDefault(""),
     sort: parseAsStringLiteral(sortValues).withDefault("Default"),
     minPrice: parseAsString
         .withOptions({
@@ -25,3 +30,4 @@ export const UseProductFilters = () => {
   return useQueryStates(params);
 }
 
+ 
